@@ -21,6 +21,12 @@ namespace NC6.Models
 
         public virtual ICollection<Student>? Students { get; }
 
+        [ForeignKey("FacultyId")]
+        public int? FacultyId { get; set; }
+
+        [Display(Name = "Kierunek")]
+        public Faculty? Faculty { get; set; }
+
     }
 }
 

@@ -17,5 +17,7 @@ namespace NC6.Data
         public DbSet<NC6.Models.Group> Group { get; set; } = default!;
 
         public DbSet<NC6.Models.Student>? Student { get; set; }
+
+        public DbSet<NC6.Models.Faculty>? Faculty { get; set; }
     }
 }
