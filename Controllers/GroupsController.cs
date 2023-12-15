@@ -23,7 +23,7 @@ namespace NC6.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Group != null ? 
-                          View(await _context.Group.ToListAsync()) :
+                          View(await _context.Group.Include(g=>g.Faculty).ToListAsync()) :
                           Problem("Entity set 'NC6Context.Group'  is null.");
         }
 
@@ -36,6 +36,8 @@ namespace NC6.Controllers
             }
 
             var @group = await _context.Group
+                .Include(g=>g.Faculty)
+                .Include(g=>g.Students)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@group == null)
             {
@@ -48,6 +50,7 @@ namespace NC6.Controllers
         // GET: Groups/Create
         public IActionResult Create()
         {
+            ViewData["FacultyId"] = new SelectList(_context.Faculty, "Id", "Name");
             return View();
         }
 
@@ -56,7 +59,7 @@ namespace NC6.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Sname")] Group @group)
+        public async Task<IActionResult> Create([Bind("Id,Name,Sname,FacultyId")] Group @group)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +67,7 @@ namespace NC6.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["FacultyId"] = new SelectList(_context.Faculty, "Id", "Name", group.FacultyId);
             return View(@group);
         }
 
@@ -80,6 +84,7 @@ namespace NC6.Controllers
             {
                 return NotFound();
             }
+            ViewData["FacultyId"] = new SelectList(_context.Faculty, "Id", "Name", group.FacultyId);
             return View(@group);
         }
 
@@ -88,7 +93,7 @@ namespace NC6.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Sname")] Group @group)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Sname,FacultyId")] Group @group)
         {
             if (id != @group.Id)
             {
@@ -115,6 +120,7 @@ namespace NC6.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["FacultyId"] = new SelectList(_context.Faculty, "Id", "Name", group.FacultyId);
             return View(@group);
         }
 
@@ -127,6 +133,7 @@ namespace NC6.Controllers
             }
 
             var @group = await _context.Group
+                .Include(g => g.Faculty)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@group == null)
             {

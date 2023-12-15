@@ -22,7 +22,7 @@ namespace NC6.Controllers
         // GET: Students
         public async Task<IActionResult> Index()
         {
-            var nC6Context = _context.Student.Include(s => s.Group);
+            var nC6Context = _context.Student.Include(s => s.Group).ThenInclude(g=>g.Faculty);
             return View(await nC6Context.ToListAsync());
         }
 
@@ -36,6 +36,7 @@ namespace NC6.Controllers
 
             var student = await _context.Student
                 .Include(s => s.Group)
+                .ThenInclude(g => g.Faculty)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (student == null)
             {

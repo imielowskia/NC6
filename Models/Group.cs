@@ -19,6 +19,7 @@ namespace NC6.Models
         [Display(Name = "Grupa")]
         public string? Sname { get; set; }
 
+        [Display(Name ="Lista studentów")]
         public virtual ICollection<Student>? Students { get; }
 
         [ForeignKey("FacultyId")]
