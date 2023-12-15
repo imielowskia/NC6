@@ -20,5 +20,8 @@ namespace NC6.Models
 
         [Display(Name = "Grupy")]
         public virtual ICollection<Group>? Groups { get; set; }
+
+        [Display(Name = "Przedmioty")]
+        public virtual ICollection<Course>? Courses { get; set; }
     }
 }

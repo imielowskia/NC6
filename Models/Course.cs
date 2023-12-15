@@ -2,35 +2,32 @@
 using System.ComponentModel.DataAnnotations;
 
 
+
 namespace NC6.Models
 {
-    [Table("Groups")]
-    public class Group
+    [Table("Courses")]
+    public class Course
     {
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
         public int Id { get; set; }
 
         [Required]
-        [Display(Name = "Nazwa")]
+        [StringLength(50)]
+        [Display(Name = "Przedmiot")]
         public string? Name { get; set; }
 
-        [Display(Name = "Grupa")]
-        public string? Sname { get; set; }
-
-        [Display(Name ="Lista studentów")]
-        public virtual ICollection<Student>? Students { get; }
+        [Display(Name = "Pkt. ECTS")]
+        public int? ects { get; set; }
 
         [ForeignKey("FacultyId")]
         public int? FacultyId { get; set; }
 
         [Display(Name = "Kierunek")]
-        public Faculty? Faculty { get; set; }
+        public virtual Faculty? Faculty { get; set; }
 
-        [Display(Name = "Przedmioty")]
-        public virtual ICollection<Course>? Courses { get; }
-
+        [Display(Name = "Grupy")]
+        public virtual ICollection<Group>? Groups { get; set; }
     }
 }
 

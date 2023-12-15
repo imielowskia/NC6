@@ -19,5 +19,7 @@ namespace NC6.Data
         public DbSet<NC6.Models.Student>? Student { get; set; }
 
         public DbSet<NC6.Models.Faculty>? Faculty { get; set; }
+
+        public DbSet<NC6.Models.Course>? Course { get; set; }
     }
 }

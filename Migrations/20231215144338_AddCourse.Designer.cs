@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NC6.Data;
 
@@ -11,9 +12,10 @@ using NC6.Data;
 namespace NC6.Migrations
 {
     [DbContext(typeof(NC6Context))]
-    partial class NC6ContextModelSnapshot : ModelSnapshot
+    [Migration("20231215144338_AddCourse")]
+    partial class AddCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
