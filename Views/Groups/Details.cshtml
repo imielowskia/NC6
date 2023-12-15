@@ -37,6 +37,17 @@
                 @s.IN<br />
             }            
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Courses)
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var c in Model.Courses)
+            {
+                @c.Name
+
+                <br />
+            }
+        </dd>
     </dl>
 </div>
 <div>

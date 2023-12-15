@@ -36,6 +36,8 @@ namespace NC6.Controllers
 
             var course = await _context.Course
                 .Include(c => c.Faculty)
+                .Include(c => c.Groups)
+                .ThenInclude(g=>g.Students)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {
