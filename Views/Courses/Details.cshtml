@@ -33,13 +33,21 @@
         </dt>
         <dd>
             <table class="table table-sm">
+                <tr>
+                    <thead>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>                        
+                    </thead>
+                </tr>
                 @foreach (var g in Model.Groups)
                 {
                     <tr>
                         <td>@g.Sname</td>
+                        <td><dt class="col-sm-2">Lista studentów</dt></td>
                         <td>
-                            <dt class="col-sm-2">Lista studentów</dt>
-                            <table>
+                            <table class="table table-sm">
                                 <tr>
                                     <thead>
                                         <th>Student</th>
@@ -63,7 +71,7 @@
                             </table>
                         </td>
                         <td>
-                            <a asp-action="TakeGrade" asp-route-id="@Model.Id" asp-route-groupid="@g.Id">Oceń grupę</a>
+                            <a asp-action="TakeGrade" asp-route-id="@Model.Id" asp-route-groupid="@g.Id" class="btn btn-info">Oceń grupę</a>
                         </td>
                     </tr>                                                        
                 }
@@ -72,6 +80,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-sm btn-secondary">Edit</a> 
+    <a asp-action="Index" class="btn btn-sm btn-secondary">Back to List</a>
 </div>

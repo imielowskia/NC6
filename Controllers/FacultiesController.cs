@@ -36,6 +36,7 @@ namespace NC6.Controllers
             }
 
             var faculty = await _context.Faculty
+                .Include(f=>f.Groups)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (faculty == null)
             {
