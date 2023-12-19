@@ -21,5 +21,12 @@ namespace NC6.Data
         public DbSet<NC6.Models.Faculty>? Faculty { get; set; }
 
         public DbSet<NC6.Models.Course>? Course { get; set; }
+
+        public DbSet<NC6.Models.Grade>? Grade { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Grade>().HasKey(g => new { g.StudentId, g.CourseId });
+        }
     }
 }

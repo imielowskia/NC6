@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +42,7 @@ namespace NC6.Controllers
                 .Include(c => c.Faculty)
                 .Include(c => c.Groups)
                 .ThenInclude(g=>g.Students)
+                .Include(c=>c.Grades)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {
@@ -161,6 +166,85 @@ namespace NC6.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        
+        // GET Courses/TakeGrade/5
+        public async Task<IActionResult> TakeGrade (int? id, int? groupid)
+        {
+            if (id == null || _context.Course == null)
+            {
+                return NotFound();
+            }
+            var course = await _context.Course.FirstOrDefaultAsync(c=>c.Id==id);
+            var group = await _context.Group.Include(g=>g.Students).ThenInclude(s=>s.Grades.Where(g=>g.CourseId==id)).FirstOrDefaultAsync(g=>g.Id==groupid);            
+            var grade = 0.0;
+            var gradelist = new List<Grade>();
+            foreach(var s in group.Students)
+            {
+                if (s.Grades.Count > 0) { grade = s.Grades.First().grade; } else { grade = 0.0; }
+                gradelist.Add(
+                    new Grade
+                    {
+                        CourseId = course.Id,
+                        StudentId = s.Id,
+                        Course = course,
+                        Student = s,
+                        grade = grade
+                    }
+                    );
+            }
+            ViewData["group"] = group;
+            ViewData["grades"] = gradelist;            
+            return View(course);
+        }
+
+
+        // POST: Courses/TakeGrade        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TakeGrade(int id )
+        {           
+            var course = await _context.Course
+                .Include(c => c.Faculty)
+                .Include(c => c.Groups)
+                .ThenInclude(g => g.Students)
+                .Include(c=>c.Grades)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            var groupid = int.Parse(HttpContext.Request.Form["grids"]);
+            var ids = HttpContext.Request.Form["ids"];
+            var grades = HttpContext.Request.Form["oceny"];
+            var xid = 0;
+            var i = 0;            
+            foreach ( var sid in ids)
+            {
+                xid = int.Parse(sid);
+                var xgr = _context.Grade.Where(g => g.StudentId == xid & g.CourseId == id);
+                if (xgr.Count()>0)
+                {
+                    var ocena = _context.Grade.Where(g => g.StudentId == xid & g.CourseId == id).Single();
+                    ocena.grade = double.Parse(grades[i]);
+                    _context.Update(ocena);
+                }
+                else
+                {
+                    var grade = new Grade()
+                    {
+                        StudentId = xid,
+                        CourseId = id,
+                        grade = double.Parse(grades[i])
+                    };
+                    _context.Add(grade);
+                }                                
+                i++;
+            }
+            
+            await _context.SaveChangesAsync();
+            return View("Details", course);
+        }
+
+
+
+
 
         private bool CourseExists(int id)
         {

@@ -39,15 +39,35 @@
                         <td>@g.Sname</td>
                         <td>
                             <dt class="col-sm-2">Lista studentów</dt>
-                            @foreach (var s in g.Students)
-                            {
-                                @s.IN
-                                <br />
-                            }
+                            <table>
+                                <tr>
+                                    <thead>
+                                        <th>Student</th>
+                                        <th>Ocena</th>
+                                    </thead>
+                                </tr>
+                                <tbody>
+                                @foreach (var s in g.Students)
+                                    {
+                                        <tr>
+                                            <td>@s.IN</td>
+                                            <td>
+                                            @if (s.Grades != null)
+                                            {
+                                                @s.Grades.Where(g => g.CourseId == Model.Id).First().grade
+                                            }                                            
+                                            </td>
+                                        </tr>                                        
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                            <a asp-action="TakeGrade" asp-route-id="@Model.Id" asp-route-groupid="@g.Id">Oceń grupę</a>
                         </td>
                     </tr>                                                        
-            }
-        </table>
+                }
+            </table>
         </dd>
     </dl>
 </div>

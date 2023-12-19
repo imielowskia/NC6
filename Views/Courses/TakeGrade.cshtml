@@ -1,0 +1,35 @@
+﻿@model NC6.Models.Course
+
+@{
+    ViewData["Title"] = "Oceny";
+}
+
+<h1>Oceny z  @Html.DisplayFor(model => model.Name)</h1>
+<h2> dla grupy: @ViewBag.group.Name</h2>
+
+<form asp-action="TakeGrade">
+<table class="table-sm">
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Ocena</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in ViewBag.grades)
+        {
+            <tr>
+                <td>@s.Student.IN</td>
+                    <td>
+                        <input type="hidden" name="ids" value="@s.StudentId" />
+                        <input name="oceny" value="@s.grade" class="form-control" />
+                    </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<input type="hidden" name="grids" value="@ViewBag.group.Id" />
+<div class="form-group">
+    <input type="submit" value="Save" class="btn btn-primary" />
+</div>
+</form>
