@@ -41,12 +41,23 @@
             @Html.DisplayNameFor(model => model.Courses)
         </dt>
         <dd class="col-sm-10">
-            @foreach (var c in Model.Courses)
-            {
-                @c.Name
-
-                <br />
-            }
+            <div class="accordion accordion-flush" id="accordionCourses">
+                @foreach (var c in Model.Courses)
+                {
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-@c.Name" aria-expanded="false" aria-controls="flush-@c.Name">
+                            @c.Name                 
+                            </button>
+                        </h2>
+                        <div id="flush-@c.Name" class="accordion-collapse collapse" data-bs-parent="#accordionCourses">
+                            <div class="accordion-body">
+                                <a asp-action="GetAttendance" asp-route-id="@Model?.Id" asp-route-courseid="@c.Id" class="btn btn-secondary btn-sm">Dodaj listę obecności</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
         </dd>
     </dl>
 </div>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -136,6 +137,34 @@ namespace NC6.Controllers
             ViewData["FacultyId"] = new SelectList(_context.Faculty, "Id", "Name", group.FacultyId);
             GetCourseList(id);
             return View(@group);
+        }
+
+
+        //Get: Group/5/Course/5/Attendance
+        //Metoda tworząca nowa listę obecności
+        [Route("Groups/{id}/Course/{courseid}")]
+        public async Task<IActionResult> GetAttendance(int? id, int? courseid)
+        {
+            var students = await _context.Student.Where(student => student.GroupId == id).ToListAsync();
+            var course = await _context.Course.FindAsync(courseid);
+            var @group = await _context.Group.FindAsync(id);
+            ViewData["students"] = students;
+            ViewData["course"] = course;
+            return View(@group);
+        }
+
+
+        //Post: Group/5/Course/5/Save
+        //Metoda obsługująca zapis listy obecności
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GetAttendance(int id)
+        {
+            var group = await _context.Group.FindAsync(id);
+            var courseid = int.Parse(HttpContext.Request.Form["courseid"]);
+            var studentids = HttpContext.Request.Form["presents"];
+            var data = HttpContext.Request.Form["data"];
+            return View("Details", group);
         }
 
         // GET: Groups/Delete/5

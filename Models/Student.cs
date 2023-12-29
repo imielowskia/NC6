@@ -42,6 +42,9 @@ namespace NC6.Models
         [Display(Name ="Oceny")]
         public ICollection<Grade>? Grades { get; set; }
 
+        [Display(Name="Obecnośc na zajęciach")]
+        public ICollection<Attendance>? Attendances { get; set; }
+
         public string IN
         {
             get

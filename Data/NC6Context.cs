@@ -16,13 +16,15 @@ namespace NC6.Data
 
         public DbSet<NC6.Models.Group> Group { get; set; } = default!;
 
-        public DbSet<NC6.Models.Student>? Student { get; set; }
+        public DbSet<NC6.Models.Student> Student { get; set; }
 
-        public DbSet<NC6.Models.Faculty>? Faculty { get; set; }
+        public DbSet<NC6.Models.Faculty> Faculty { get; set; }
 
-        public DbSet<NC6.Models.Course>? Course { get; set; }
+        public DbSet<NC6.Models.Course> Course { get; set; }
 
-        public DbSet<NC6.Models.Grade>? Grade { get; set; }
+        public DbSet<NC6.Models.Grade> Grade { get; set; }
+
+        public DbSet<NC6.Models.Attendance> Attendance { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
