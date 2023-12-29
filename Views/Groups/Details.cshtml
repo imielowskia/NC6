@@ -54,6 +54,32 @@
                             <div class="accordion-body">
                                 <a asp-action="GetAttendance" asp-route-id="@Model?.Id" asp-route-courseid="@c.Id" class="btn btn-secondary btn-sm">Dodaj listę obecności</a>
                             </div>
+                            <div class="container text-left">
+                                @if(c.Attendances != null)
+                                {
+                                    var data1 = c.Attendances.OrderBy(a => a.DataS).First().DataS;
+                                    <div class="row border-bottom bg-success">
+                                        <div class="col"><h5> Lista obecności z dnia: @data1</h5></div>
+                                    </div>
+                                    foreach (var a in c.Attendances.OrderBy(a => a.DataS))
+                                    {
+                                        if (a.DataS != data1)
+                                        {
+                                            data1 = a.DataS;
+                                            <div class="row border-bottom bg-success">
+                                                <div class="col"><h5> Lista obecności z dnia: @data1</h5></div>
+                                            </div>
+                                        }
+                                        if (c.Id == a.CourseId)
+                                        {
+                                            <div class="row border-bottom">
+                                                <div class="col">@a.Student.IN</div>                                                
+                                            </div>
+                                        }
+                                    }
+                                }
+                                
+                            </div>
                         </div>
                     </div>
                 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -40,6 +40,8 @@ namespace NC6.Controllers
                 .Include(g=>g.Faculty)
                 .Include(g=>g.Students)
                 .Include(g=>g.Courses)
+                .ThenInclude(c => c.Attendances)
+                .ThenInclude(a=>a.Student)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@group == null)
             {
@@ -158,12 +160,32 @@ namespace NC6.Controllers
         //Metoda obsługująca zapis listy obecności
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Groups/{id}/Course/{courseid}")]
         public async Task<IActionResult> GetAttendance(int id)
         {
-            var group = await _context.Group.FindAsync(id);
             var courseid = int.Parse(HttpContext.Request.Form["courseid"]);
             var studentids = HttpContext.Request.Form["presents"];
-            var data = HttpContext.Request.Form["data"];
+            var data = DateTime.Parse(HttpContext.Request.Form["data"]);
+            foreach (var sid in studentids)
+            {
+                var xid = int.Parse(sid);
+                var xattnd = new Attendance
+                {
+                    StudentId = xid,
+                    CourseId = courseid,
+                    DataS = data
+                };
+                _context.Add(xattnd);
+            }
+            await _context.SaveChangesAsync();
+            var @group = await _context.Group
+                .Include(g => g.Faculty)
+                .Include(g => g.Students)              
+                .Include(g => g.Courses)
+                .ThenInclude(c=>c.Attendances)
+                .ThenInclude(a => a.Student)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            
             return View("Details", group);
         }
 

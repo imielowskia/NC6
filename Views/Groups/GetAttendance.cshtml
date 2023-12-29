@@ -8,6 +8,7 @@
 
 <h4>Group @Model.Name z dnai @DateTime.Now</h4>
 <h5>Przedmiot: @ViewBag.course.Name </h5>
+<form asp-action="GetAttendance">
 <div class="form-group">
     <div class="container text-left">
         @foreach(var s in ViewBag.students)
@@ -17,11 +18,10 @@
                 <div class="col"> <input type="checkbox" name="presents" value="@s.Id"/> </div>
             </div>
         }
-        <div class="row">
-            <input type="submit" value="Save" class="btn btn-primary btn-sm" />
-        </div>
-        
+       <div class="row"></div>
+       <div class="row"><input type="submit" value="Save" class="btn btn-primary btn-sm" /></div>                          
     </div>
     <input type="hidden" name="courseid" value="@ViewBag.course.Id" />
-    <input type="hidden" name="data" value="@DateTime.Now" />
+    <input type="hidden" name="data" value="@DateTime.Now" />    
 </div>
+</form>
