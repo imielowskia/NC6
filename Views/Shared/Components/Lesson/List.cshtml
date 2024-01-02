@@ -1,0 +1,36 @@
+﻿@if (ViewBag.lessons != null )
+{
+    var xdata = ViewBag.lessons[0].DataS;
+    <div class="row bg-secondary border-bottom">
+        <div class="col">
+            <h4>Lista obecności z dnia @xdata</h4>
+        </div>
+    </div>
+    
+    foreach(var a in ViewBag.lessons)
+    {
+        if (xdata == a.DataS)
+        {
+            <div class="row border-bottom">
+                <div class="col">@a.Student.IN </div>
+            </div>
+        }
+        else
+        {
+            xdata = a.DataS;
+            <div class="row bg-secondary border-bottom">
+                <div class="col">
+                    <h4>Lista obecności z dnia @xdata</h4>
+                </div>
+            </div>
+            <div class="row border-bottom">
+                <div class="col">@a.Student.IN </div>
+            </div>
+        }
+
+    }    
+}
+
+
+
+

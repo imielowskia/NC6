@@ -29,11 +29,20 @@ namespace NC6.Controllers
         }
 
         // GET: Groups/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? newlist)
         {
             if (id == null || _context.Group == null)
             {
                 return NotFound();
+            }
+
+            if (newlist != null)
+            {
+                ViewBag.newlist = newlist;
+            }
+            else
+            {
+                ViewBag.newlist = 0;
             }
 
             var @group = await _context.Group
@@ -190,6 +199,40 @@ namespace NC6.Controllers
                 .ThenInclude(a => a.Student)
                 .FirstOrDefaultAsync(m => m.Id == id);
             
+            return View("Details", group);
+        }
+
+
+        //Post: Group/5/Course/5/Save
+        //Metoda obsługująca zapis listy obecności
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Groups/{id}/LessonSave/{courseid}")]
+        public async Task<IActionResult> LessonSave(int id)
+        {
+            var courseid = int.Parse(HttpContext.Request.Form["courseid"]);
+            var studentids = HttpContext.Request.Form["presents"];
+            var data = DateTime.Parse(HttpContext.Request.Form["data"]);
+            foreach (var sid in studentids)
+            {
+                var xid = int.Parse(sid);
+                var xattnd = new Attendance
+                {
+                    StudentId = xid,
+                    CourseId = courseid,
+                    DataS = data
+                };
+                _context.Add(xattnd);
+            }
+            await _context.SaveChangesAsync();
+            var @group = await _context.Group
+                .Include(g => g.Faculty)
+                .Include(g => g.Students)
+                .Include(g => g.Courses)
+                .ThenInclude(c => c.Attendances)
+                .ThenInclude(a => a.Student)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             return View("Details", group);
         }
 
