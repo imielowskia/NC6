@@ -39,14 +39,18 @@ namespace NC6.Controllers
             var @group = await _context.Group
                 .Include(g=>g.Faculty)
                 .Include(g=>g.Students)
-                .Include(g=>g.Courses)
-                .ThenInclude(c => c.Attendances)
+                .Include(g=>g.Courses)  
+                .ThenInclude(c=>c.Attendances)
                 .ThenInclude(a=>a.Student)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@group == null)
             {
                 return NotFound();
             }
+
+            var attnd = _context.Attendance.Where(a=>a.Student.GroupId==id).OrderBy(a=>a.DataS).ToList();
+
+            ViewData["Attndc"] = attnd;
 
             return View(@group);
         }

@@ -55,30 +55,37 @@
                                 <a asp-action="GetAttendance" asp-route-id="@Model?.Id" asp-route-courseid="@c.Id" class="btn btn-secondary btn-sm">Dodaj listę obecności</a>
                             </div>
                             <div class="container text-left">
-                                @if(c.Attendances != null)
-                                {
-                                    var data1 = c.Attendances.OrderBy(a => a.DataS).First().DataS;
-                                    <div class="row border-bottom bg-success">
-                                        <div class="col"><h5> Lista obecności z dnia: @data1</h5></div>
-                                    </div>
-                                    foreach (var a in c.Attendances.OrderBy(a => a.DataS))
+                                @{
+                                    if (c.Attendances.Where(a => a.Student.GroupId == Model.Id).Count() > 0)
                                     {
-                                        if (a.DataS != data1)
+                                        var data0 = c.Attendances.Where(a => a.Student.GroupId == Model.Id).First().DataS;
+                                        <div class="row bg-info">
+                                            <div class="col">Lista obbecności z dnia: @data0</div>
+                                        </div>
+                                        @foreach (var a in c.Attendances.Where(a => a.Student.GroupId == Model.Id))
                                         {
-                                            data1 = a.DataS;
-                                            <div class="row border-bottom bg-success">
-                                                <div class="col"><h5> Lista obecności z dnia: @data1</h5></div>
-                                            </div>
+                                            if (data0 != @a.DataS)
+                                            {
+                                                data0 = a.DataS;
+                                                <div class="row bg-info">
+                                                    <div class="col">Lista obbecności z dnia: @a.DataS</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">@a.Student.IN</div><div class="col">@a.DataS</div>
+                                                </div>
+                                            }                                            
+                                            else
+                                            {
+                                                <div class="row">
+                                                    <div class="col">@a.Student.IN</div><div class="col">@a.DataS</div>
+                                                </div>
+                                            }
+
                                         }
-                                        if (c.Id == a.CourseId)
-                                        {
-                                            <div class="row border-bottom">
-                                                <div class="col">@a.Student.IN</div>                                                
-                                            </div>
-                                        }
-                                    }
+                                    }                                    
                                 }
                                 
+
                             </div>
                         </div>
                     </div>

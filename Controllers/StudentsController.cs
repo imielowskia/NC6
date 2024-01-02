@@ -38,9 +38,10 @@ namespace NC6.Controllers
                 .Include(s => s.Group)
                 .ThenInclude(g => g.Faculty)
                 .Include(s => s.Group)
-                .ThenInclude(g=>g.Courses)
-                .Include(s=>s.Grades)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .ThenInclude(g => g.Courses)
+                .ThenInclude(c=>c.Attendances.Where(a=>a.StudentId==id))
+                .Include(s => s.Grades)                
+                .FirstOrDefaultAsync(m => m.Id == id);                
             if (student == null)
             {
                 return NotFound();
