@@ -32,7 +32,7 @@ namespace NC6.Models
         [Display(Name = "Oceny")]
         public ICollection<Grade>? Grades { get; set; }
 
-        [Display(Name = "Obecnośc na zajęciach")]
+        [Display(Name = "Obecność na zajęciach")]
         public ICollection<Attendance>? Attendances { get; set; }
     }
 }
