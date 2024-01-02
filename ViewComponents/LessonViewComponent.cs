@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NC6.Controllers;
-using NC6.Models;
 using NC6.Data;
 using Microsoft.EntityFrameworkCore;
 

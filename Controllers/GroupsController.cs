@@ -153,64 +153,16 @@ namespace NC6.Controllers
             GetCourseList(id);
             return View(@group);
         }
+      
 
-
-        //Get: Group/5/Course/5/Attendance
-        //Metoda tworząca nowa listę obecności
-        [Route("Groups/{id}/Course/{courseid}")]
-        public async Task<IActionResult> GetAttendance(int? id, int? courseid)
-        {
-            var students = await _context.Student.Where(student => student.GroupId == id).ToListAsync();
-            var course = await _context.Course.FindAsync(courseid);
-            var @group = await _context.Group.FindAsync(id);
-            ViewData["students"] = students;
-            ViewData["course"] = course;
-            return View(@group);
-        }
-
-
-        //Post: Group/5/Course/5/Save
+        //Post: Group/LessonSave
         //Metoda obsługująca zapis listy obecności
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("Groups/{id}/Course/{courseid}")]
-        public async Task<IActionResult> GetAttendance(int id)
+        [ValidateAntiForgeryToken]        
+        public async Task<IActionResult> LessonSave()
         {
             var courseid = int.Parse(HttpContext.Request.Form["courseid"]);
-            var studentids = HttpContext.Request.Form["presents"];
-            var data = DateTime.Parse(HttpContext.Request.Form["data"]);
-            foreach (var sid in studentids)
-            {
-                var xid = int.Parse(sid);
-                var xattnd = new Attendance
-                {
-                    StudentId = xid,
-                    CourseId = courseid,
-                    DataS = data
-                };
-                _context.Add(xattnd);
-            }
-            await _context.SaveChangesAsync();
-            var @group = await _context.Group
-                .Include(g => g.Faculty)
-                .Include(g => g.Students)              
-                .Include(g => g.Courses)
-                .ThenInclude(c=>c.Attendances)
-                .ThenInclude(a => a.Student)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            
-            return View("Details", group);
-        }
-
-
-        //Post: Group/5/Course/5/Save
-        //Metoda obsługująca zapis listy obecności
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("Groups/{id}/LessonSave/{courseid}")]
-        public async Task<IActionResult> LessonSave(int id)
-        {
-            var courseid = int.Parse(HttpContext.Request.Form["courseid"]);
+            var groupid = int.Parse(HttpContext.Request.Form["groupid"]);
             var studentids = HttpContext.Request.Form["presents"];
             var data = DateTime.Parse(HttpContext.Request.Form["data"]);
             foreach (var sid in studentids)
@@ -231,7 +183,7 @@ namespace NC6.Controllers
                 .Include(g => g.Courses)
                 .ThenInclude(c => c.Attendances)
                 .ThenInclude(a => a.Student)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == groupid);
 
             return View("Details", group);
         }

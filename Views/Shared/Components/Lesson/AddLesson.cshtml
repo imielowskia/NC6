@@ -1,7 +1,5 @@
 ﻿@model NC6.Models.Group
 
-<h4>Group @Model.Name</h4>
-
 <form asp-action="LessonSave" method="post">
     <div class="form-group">
         <div class="container text-left">
@@ -13,10 +11,10 @@
                 </div>
             }
             <div class="row"></div>
-            <div class="row">
-                <a asp-action="LessonSave" asp-route-id="@Model?.Id" asp-route-courseid="@ViewBag.courseid" asp- class="btn btn-primary btn-sm">Zapisz listę obecności</a>
-                <div class="row"><input type="submit" value="Save" class="btn btn-primary btn-sm" /></div>
+            <div class="row">               
+                <div class="col"><input type="submit" value="Save" class="btn btn-primary btn-sm" /></div>
             </div>
+        <input type="hidden" name="groupid" value="@Model.Id" />
         <input type="hidden" name="courseid" value="@ViewBag.courseid" />
         <input type="hidden" name="data" value="@DateTime.Now" />
     </div>
